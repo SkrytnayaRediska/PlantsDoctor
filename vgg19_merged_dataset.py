@@ -29,7 +29,7 @@ SEED = 42
 
 def read_split(path: Path) -> pd.DataFrame:
     df = pd.read_csv(path)
-    assert {"filepath", "crop"}.issubset(df.columns), f"{path} должен содержать столбцы: filepath, crop"
+    assert {"filepath", "crop"}.issubset(df.columns), f"{path} must contain columns: filepath, crop"
     df = df[["filepath", "crop"]].copy()
     df["filepath"] = df["filepath"].astype(str)
     df["crop"] = df["crop"].astype(str).str.strip().str.lower()
@@ -44,10 +44,10 @@ def make_opt(lr):
 
 def decode(path: tf.Tensor) -> tf.Tensor:
     img = tf.io.read_file(path)
-    img = tf.image.decode_image(img, channels=3, expand_animations=False)  # поддержка любых форматов
+    img = tf.image.decode_image(img, channels=3, expand_animations=False)
     img = tf.image.resize(img, (IMG_SIZE, IMG_SIZE))
     img = tf.cast(img, tf.float32)
-    return vgg_pre(img)  # VGG19 preprocessing (RGB->BGR, центрирование)
+    return vgg_pre(img)  # VGG19 preprocessing (RGB->BGR, centering)
 
 
 def make_ds(df: pd.DataFrame, training: bool) -> tf.data.Dataset:
